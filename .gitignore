@@ -1,4 +1,8 @@
 
+ss
+*.gch
+*.out
 *.swp
+*.sh
 .*
 
