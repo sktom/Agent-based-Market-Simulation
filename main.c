@@ -16,7 +16,6 @@ const int N_TRIAL = 100;
 int
 main(int argc, char ** argv)
 {
-
 #ifdef MPI_MODE
   MPI_Init(&argc, &argv);
   int myid;
