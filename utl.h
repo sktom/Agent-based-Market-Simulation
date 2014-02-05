@@ -7,7 +7,8 @@
 #define putl(x) printf("%ld\n",x)
 #define putd(x) printf("%lf\n",x)
 
-double max(double * values, int size)
+double
+max(double * values, int size)
 {
   double max;
   double * value;
@@ -17,7 +18,8 @@ double max(double * values, int size)
   return max;
 }
 
-double min(double * values, int size)
+double
+min(double * values, int size)
 {
   double min = *values;
   double * value;

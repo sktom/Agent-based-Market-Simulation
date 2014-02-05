@@ -14,10 +14,7 @@ const int N_AGENTS = 2500;
 const int N_TRIAL = 100;
 
 int
-main(
-  int argc,
-  char ** argv
-)
+main(int argc, char ** argv)
 {
 
 #ifdef MPI_MODE
@@ -28,19 +25,16 @@ main(
   MPI_Comm_rank(MPI_COMM_WORLD, &myid);
 #endif
 
-  int n;
-  double l_min, l_max;
   Agent * agents = malloc(sizeof(Agent) * N_AGENTS);
 
-  Agent * agent;
-  int num_agents;
 
   init_agents(agents, N_AGENTS);
 
-  n = N_TRIAL;
-  while(n--)
+  int n;
+  for(n = N_TRIAL; n--;)
   {
     int i;
+    Agent * agent;
     for(agent = agents, i = N_AGENTS; i--; ++agent)
     {
       agent->refresh(agent);
@@ -59,10 +53,11 @@ main(
       *ask = agent->ask;
     }
 
+    double l_min, l_max;
     l_max = max(bids, N_AGENTS);
     l_min = min(asks, N_AGENTS);
 
-  double g_min, g_max;
+    double g_min, g_max;
 #ifdef MPI_MODE
     MPI_Reduce(&l_max, &g_max, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
     MPI_Reduce(&l_min, &g_min, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);

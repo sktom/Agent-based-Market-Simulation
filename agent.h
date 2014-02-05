@@ -31,7 +31,8 @@ set_price(Agent * agent, double price)
   agent->refresh(agent);
 }
 
-void init_agent(Agent * agent)
+void
+init_agent(Agent * agent)
 {
   agent->ask = 100;
   agent->spread = agent->ask / 10;

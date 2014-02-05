@@ -4,7 +4,8 @@
 
 #include "utl.h"
 
-double rnd()
+double
+rnd()
 {
   struct timeval tv;
   gettimeofday(&tv, NULL);
