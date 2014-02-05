@@ -49,7 +49,6 @@ init_agents(Agent * agents, int num_agents)
   {
     init_agent(agent);
     agent->refresh(agent);
-    //putd(agent->bid);
   }
 }
 

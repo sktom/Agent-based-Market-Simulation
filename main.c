@@ -26,8 +26,6 @@ main(int argc, char ** argv)
 #endif
 
   Agent * agents = malloc(sizeof(Agent) * N_AGENTS);
-
-
   init_agents(agents, N_AGENTS);
 
   int n;
@@ -66,9 +64,9 @@ main(int argc, char ** argv)
 #endif
 
 #ifndef MPI_MODE
-  int myid = 0;
+    int myid = 0;
 #endif
-  double new_market_price = 0;
+    double new_market_price = 0;
     if(!myid)
     {
       if(g_max > g_min)
