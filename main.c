@@ -10,7 +10,7 @@
 #include "utl.h"
 #include "agent.h"
 
-const int N_AGENTS = 2500;
+const int N_AGENTS = 25;
 const int N_TRIAL = 100;
 
 int
@@ -57,9 +57,8 @@ main(int argc, char ** argv)
     double g_min, g_max;
 #ifdef MPI_MODE
     MPI_Reduce(&l_max, &g_max, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&l_min, &g_min, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&l_min, &g_min, 1, MPI_DOUBLE, MPI_MIN, 0, MPI_COMM_WORLD);
 
-    MPI_Barrier(MPI_COMM_WORLD);
 #endif
 
 #ifndef MPI_MODE
@@ -77,8 +76,11 @@ main(int argc, char ** argv)
       }
     }
 
+    MPI_Barrier(MPI_COMM_WORLD);
+
     if((int)new_market_price)
     {
+puti(N_TRIAL - n);
 putd(new_market_price);
       for(agent = agents, i = N_AGENTS; i--; ++agent)
       {
