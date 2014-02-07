@@ -19,6 +19,7 @@ void
 refresh_price(Agent * agent)
 {
   double dp = (rnd() * 2 - 1) / 1000 * agent->ask;
+  //printf(" %lf", dp);
   agent->ask += dp;
   agent->bid += dp;
 }
@@ -49,5 +50,27 @@ init_agents(Agent * agents, int num_agents)
     init_agent(agent);
     agent->refresh(agent);
   }
+}
+
+void
+minmax(double * min_ask, double *max_bid, Agent * agents, int num_agents)
+{
+  double * bids;
+  double * asks;
+  bids = (double *)malloc(sizeof(double) * num_agents);
+  asks = (double *)malloc(sizeof(double) * num_agents);
+
+  double * bid;
+  double * ask;
+  Agent * agent = agents;
+  int i;
+  for(bid = bids, ask = asks, i = num_agents; i--; ++agent, ++bid, ++ask)
+  {
+    *bid = agent->bid;
+    *ask = agent->ask;
+  }
+
+  *min_ask = min(asks, num_agents);
+  *max_bid = max(bids, num_agents);
 }
 
