@@ -2,6 +2,7 @@
 #define __UTL__
 #include <stdio.h>
 
+#define p(x, y) printf(x, y)
 #define puts(x) printf("%s\n",x)
 #define puti(x) printf("%d\n",x)
 #define putl(x) printf("%ld\n",x)
