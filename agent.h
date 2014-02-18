@@ -53,12 +53,12 @@ init_agents(Agent * agents, int num_agents)
 }
 
 void
-minmax(double * min_ask, double *max_bid, Agent * agents, int num_agents)
+minmax(double * min_ask, double * max_bid, Agent * agents, int num_agents)
 {
   double * bids;
   double * asks;
-  bids = (double *)malloc(sizeof(double) * num_agents);
-  asks = (double *)malloc(sizeof(double) * num_agents);
+  bids = malloc(sizeof(double) * num_agents);
+  asks = malloc(sizeof(double) * num_agents);
 
   double * bid;
   double * ask;
