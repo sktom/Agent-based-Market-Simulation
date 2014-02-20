@@ -18,8 +18,8 @@ main(int argc, char ** argv)
   Agent * agents = init(&argc, argv, &myid, &numprocs);
 
   double new_price = 0;
-  int n;
-  for(n = 0; n < N_TRIAL; ++n)
+  int t;
+  for(t = 0; t < N_TRIAL; ++t)
   {
     int i;
     Agent * agent;
@@ -33,12 +33,12 @@ main(int argc, char ** argv)
       if(g_max_bid > g_min_ask)
       {
         new_price = (g_min_ask + g_max_bid) / 2;
-        printf("%d %lf\n", n, new_price);
+        printf("%d %lf\n", t, new_price);
       }
 
     MPI_Bcast(&new_price, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-    for(;new_price != 0; new_price = 0)
+    for(;new_price; new_price = 0)
       for(agent = agents, i = N_AGENTS; i--; ++agent)
         agent->set(agent, new_price);
   }

@@ -18,8 +18,7 @@ typedef struct Agent Agent;
 void
 refresh_price(Agent * agent)
 {
-  double dp = (rnd() * 2 - 1) / 1000 * agent->ask;
-  //printf(" %lf", dp);
+  double dp = (rnd() * 2 - 1) / 2000 * agent->ask;
   agent->ask += dp;
   agent->bid += dp;
 }
@@ -35,7 +34,7 @@ void
 init_agent(Agent * agent)
 {
   agent->ask = 100;
-  agent->spread = agent->ask / 50;
+  agent->spread = agent->ask / 100;
   agent->bid = agent->ask - agent->spread;
   agent->refresh = refresh_price;
   agent->set = set_price;
