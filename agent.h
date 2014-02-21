@@ -1,7 +1,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "rand.h"
 
 #include "utl.h"
 
@@ -18,7 +17,7 @@ typedef struct Agent Agent;
 void
 refresh_price(Agent * agent)
 {
-  double dp = (rnd() * 2 - 1) / 2000 * agent->ask;
+  double dp = grand() / 2000 * agent->ask;
   agent->ask += dp;
   agent->bid += dp;
 }
