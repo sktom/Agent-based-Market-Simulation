@@ -5,8 +5,11 @@
 
 #include "utl.h"
 #include "agent.h"
+/* Local Agent Size */
 int N_AGENTS = 1234;
+/* Global(All) Agent Size */
 int ALL_N_AGENTS = 12345;
+/* Time Step */
 int N_TRIAL = 300000;
 
 Agent * init(int *, char **, int *, int *);
@@ -32,7 +35,7 @@ main(int argc, char ** argv)
   double new_price = 0;
   int t;
   for(t = 0; t < N_TRIAL; ++t)  {
-    int i;
+    int i; 
     Agent * agent;
     
     for(agent = agents, i = N_AGENTS; i--; ++agent)
@@ -67,6 +70,7 @@ init(int * argc, char ** argv, int * myid, int * numprocs)
   MPI_Comm_size(MPI_COMM_WORLD, numprocs);
   MPI_Comm_rank(MPI_COMM_WORLD, myid);
   
+  /* ローカルのエージェント数は、割り算で */
   N_AGENTS = ALL_N_AGENTS / *numprocs;
 
   Agent * agents = malloc(sizeof(Agent) * N_AGENTS);
