@@ -5,8 +5,9 @@
 
 #include "utl.h"
 #include "agent.h"
-const int N_AGENTS = 25000;
-const int N_TRIAL = 100000;
+int N_AGENTS = 1234;
+int ALL_N_AGENTS = 12345;
+int N_TRIAL = 300000;
 
 Agent * init(int *, char **, int *, int *);
 void get_extreme_value(double *, double *, Agent *);
@@ -15,14 +16,25 @@ int
 main(int argc, char ** argv)
 {
   int myid, numprocs;
+  
+  int n1, n2;
+  n1 = atoi(argv[1]);
+  n2 = atoi(argv[2]);
+  
+  if (n1 > 0){ ALL_N_AGENTS=n1; }
+  if (n2 > 0){ N_TRIAL=n2; }
   Agent * agents = init(&argc, argv, &myid, &numprocs);
 
+  if(myid == 0){
+   printf("%d %d %d\n", ALL_N_AGENTS, N_AGENTS, N_TRIAL);
+  }
+  
   double new_price = 0;
   int t;
-  for(t = 0; t < N_TRIAL; ++t)
-  {
+  for(t = 0; t < N_TRIAL; ++t)  {
     int i;
     Agent * agent;
+    
     for(agent = agents, i = N_AGENTS; i--; ++agent)
       agent->refresh(agent);
 
@@ -34,6 +46,7 @@ main(int argc, char ** argv)
       {
         new_price = (g_min_ask + g_max_bid) / 2;
         printf("%d %lf\n", t, new_price);
+        fflush(stdout);
       }
 
     MPI_Bcast(&new_price, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -53,6 +66,8 @@ init(int * argc, char ** argv, int * myid, int * numprocs)
   MPI_Init(argc, &argv);
   MPI_Comm_size(MPI_COMM_WORLD, numprocs);
   MPI_Comm_rank(MPI_COMM_WORLD, myid);
+  
+  N_AGENTS = ALL_N_AGENTS / *numprocs;
 
   Agent * agents = malloc(sizeof(Agent) * N_AGENTS);
   init_agents(agents, N_AGENTS);
