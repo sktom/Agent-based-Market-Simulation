@@ -5,8 +5,8 @@
 
 #include "utl.h"
 #include "agent.h"
-const int N_AGENTS = 25000;
-const int N_TRIAL = 100000;
+const int N_AGENTS = 250000;
+const int N_TRIAL = 10000;
 
 Agent * init(int *, char **, int *, int *);
 void get_extreme_value(double *, double *, Agent *);
@@ -33,7 +33,7 @@ main(int argc, char ** argv)
       if(g_max_bid > g_min_ask)
       {
         new_price = (g_min_ask + g_max_bid) / 2;
-        printf("%d %lf\n", t, new_price);
+        //printf("%d %lf\n", t, new_price);
       }
 
     MPI_Bcast(&new_price, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
