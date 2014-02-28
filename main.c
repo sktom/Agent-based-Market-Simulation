@@ -1,9 +1,9 @@
 
 /*
  * USAGE:
- *   This program require 2 arguments to run
- *   first agrgument stand for all number of agents, and
- *   second agrument stand for 
+ *   This program require 2 arguments to run.
+ *   First agrgument stands for total number of agents, and
+ *   second agrument stands for a number of trials.
  */
 #include "mpi.h"
 #include <stdio.h>
@@ -41,7 +41,7 @@ main(int argc, char ** argv)
 
     MPI_Bcast(&new_price, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-    for(;new_price; new_price = 0)
+    for(; new_price; new_price = 0)
       for(agent = agents, i = number_local_agents; i--; ++agent)
         agent->set(agent, new_price);
   }
@@ -52,7 +52,7 @@ main(int argc, char ** argv)
 
 Agent *
 init(int * argc, char ** argv,
-    int * number_all_agents, int * number_local_agents, int * number_trials,
+    int * number_total_agents, int * number_local_agents, int * number_trials,
     int * myid, int * numprocs)
 {
   init_rand();
@@ -60,8 +60,8 @@ init(int * argc, char ** argv,
   MPI_Comm_size(MPI_COMM_WORLD, numprocs);
   MPI_Comm_rank(MPI_COMM_WORLD, myid);
   
-  *number_all_agents = atoi(argv[1]);
-  *number_local_agents = *number_all_agents / *numprocs;
+  *number_total_agents = atoi(argv[1]);
+  *number_local_agents = *number_total_agents / *numprocs;
   *number_trials = atoi(argv[2]);
 
   Agent * agents = malloc(sizeof(Agent) * *number_local_agents);
