@@ -1,7 +1,6 @@
 
 /*
- * USAGE:
- *   This program require 2 arguments to run.
+ * This program require 2 arguments to run.
  *   First agrgument stands for total number of agents, and
  *   second agrument stands for a number of trials.
  */
@@ -29,13 +28,13 @@ main(int argc, char ** argv)
     for(agent = agents, i = number_local_agents; i--; ++agent)
       agent->refresh(agent);
 
-    double min_global_ask, max_global_bid;
-    get_extreme_value(&min_global_ask, &max_global_bid, agents, number_local_agents);
+    double min_whole_ask, max_whole_bid;
+    get_extreme_value(&min_whole_ask, &max_whole_bid, agents, number_local_agents);
 
     if(myid == 0)
-      if(max_global_bid > min_global_ask)
+      if(max_whole_bid > min_whole_ask)
       {
-        new_price = (min_global_ask + max_global_bid) / 2;
+        new_price = (min_whole_ask + max_whole_bid) / 2;
         printf("%d %lf\n", t, new_price);
       }
 
@@ -70,12 +69,12 @@ init(int * argc, char ** argv,
 }
 
 void
-get_extreme_value(double * min_global_ask, double * max_global_bid,
+get_extreme_value(double * min_whole_ask, double * max_whole_bid,
     Agent * agents, int number_local_agents)
 {
   double min_local_ask, max_local_bid;
   minmax(&min_local_ask, &max_local_bid, agents, number_local_agents);
-  MPI_Reduce(&max_local_bid, max_global_bid, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-  MPI_Reduce(&min_local_ask, min_global_ask, 1, MPI_DOUBLE, MPI_MIN, 0, MPI_COMM_WORLD);
+  MPI_Reduce(&max_local_bid, max_whole_bid, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+  MPI_Reduce(&min_local_ask, min_whole_ask, 1, MPI_DOUBLE, MPI_MIN, 0, MPI_COMM_WORLD);
 }
 
