@@ -16,19 +16,19 @@ init_rand()
 {
   struct timeval tv;
   gettimeofday(&tv, NULL);
-  init_genormal_rand(tv.tv_usec);
+  init_genrand(tv.tv_usec);
 }
 
 double
-unform_rand()
+uniform_rand()
 {
-  return genormal_rand_real1();
+  return genrand_real1();
 }
 
 double
 normal_rand()
 {
-  return pow(-2 * log(unform_rand()), 0.5) * cos(2 * M_PI * unform_rand());
+  return pow(-2 * log(uniform_rand()), 0.5) * cos(2 * M_PI * uniform_rand());
 }
 
 double
