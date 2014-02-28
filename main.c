@@ -1,70 +1,48 @@
 
+/*
+ * USAGE:
+ *   This program require 2 arguments to run
+ *   first agrgument stand for all number of agents, and
+ *   second agrument stand for 
+ */
 #include "mpi.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "utl.h"
+#include "main.h"
+#include "util.h"
 #include "agent.h"
-<<<<<<< HEAD
-const int N_AGENTS = 250000;
-const int N_TRIAL = 10000;
-=======
-/* Local Agent Size */
-int N_AGENTS = 1234;
-/* Global(All) Agent Size */
-int ALL_N_AGENTS = 12345;
-/* Time Step */
-int N_TRIAL = 300000;
->>>>>>> e16c3316932f2974c4d93f70fa12d6a15848cba0
 
-Agent * init(int *, char **, int *, int *);
-void get_extreme_value(double *, double *, Agent *);
+Agent * init(int *, char **, int *, int *, int *, int *, int *);
+void get_extreme_value(double *, double *, Agent *, int);
 
 int
 main(int argc, char ** argv)
 {
-  int myid, numprocs;
-  
-  int n1, n2;
-  n1 = atoi(argv[1]);
-  n2 = atoi(argv[2]);
-  
-  if (n1 > 0){ ALL_N_AGENTS=n1; }
-  if (n2 > 0){ N_TRIAL=n2; }
-  Agent * agents = init(&argc, argv, &myid, &numprocs);
-
-  if(myid == 0){
-   printf("%d %d %d\n", ALL_N_AGENTS, N_AGENTS, N_TRIAL);
-  }
-  
+  INIT_AGENTS;
   double new_price = 0;
   int t;
-  for(t = 0; t < N_TRIAL; ++t)  {
+  for(t = 0; t < number_trials; ++t)  {
     int i; 
     Agent * agent;
     
-    for(agent = agents, i = N_AGENTS; i--; ++agent)
+    for(agent = agents, i = number_local_agents; i--; ++agent)
       agent->refresh(agent);
 
-    double g_min_ask, g_max_bid;
-    get_extreme_value(&g_min_ask, &g_max_bid, agents);
+    double min_global_ask, max_global_bid;
+    get_extreme_value(&min_global_ask, &max_global_bid, agents, number_local_agents);
 
     if(myid == 0)
-      if(g_max_bid > g_min_ask)
+      if(max_global_bid > min_global_ask)
       {
-        new_price = (g_min_ask + g_max_bid) / 2;
-<<<<<<< HEAD
-        //printf("%d %lf\n", t, new_price);
-=======
+        new_price = (min_global_ask + max_global_bid) / 2;
         printf("%d %lf\n", t, new_price);
-        fflush(stdout);
->>>>>>> e16c3316932f2974c4d93f70fa12d6a15848cba0
       }
 
     MPI_Bcast(&new_price, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
     for(;new_price; new_price = 0)
-      for(agent = agents, i = N_AGENTS; i--; ++agent)
+      for(agent = agents, i = number_local_agents; i--; ++agent)
         agent->set(agent, new_price);
   }
 
@@ -73,26 +51,31 @@ main(int argc, char ** argv)
 }
 
 Agent *
-init(int * argc, char ** argv, int * myid, int * numprocs)
+init(int * argc, char ** argv,
+    int * number_all_agents, int * number_local_agents, int * number_trials,
+    int * myid, int * numprocs)
 {
+  init_rand();
   MPI_Init(argc, &argv);
   MPI_Comm_size(MPI_COMM_WORLD, numprocs);
   MPI_Comm_rank(MPI_COMM_WORLD, myid);
   
-  /* ローカルのエージェント数は、割り算で */
-  N_AGENTS = ALL_N_AGENTS / *numprocs;
+  *number_all_agents = atoi(argv[1]);
+  *number_local_agents = *number_all_agents / *numprocs;
+  *number_trials = atoi(argv[2]);
 
-  Agent * agents = malloc(sizeof(Agent) * N_AGENTS);
-  init_agents(agents, N_AGENTS);
+  Agent * agents = malloc(sizeof(Agent) * *number_local_agents);
+  init_agents(agents, *number_local_agents);
   return agents;
 }
 
 void
-get_extreme_value(double * g_min_ask, double * g_max_bid, Agent * agents)
+get_extreme_value(double * min_global_ask, double * max_global_bid,
+    Agent * agents, int number_local_agents)
 {
-  double l_min_ask, l_max_bid;
-  minmax(&l_min_ask, &l_max_bid, agents, N_AGENTS);
-  MPI_Reduce(&l_max_bid, g_max_bid, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-  MPI_Reduce(&l_min_ask, g_min_ask, 1, MPI_DOUBLE, MPI_MIN, 0, MPI_COMM_WORLD);
+  double min_local_ask, max_local_bid;
+  minmax(&min_local_ask, &max_local_bid, agents, number_local_agents);
+  MPI_Reduce(&max_local_bid, max_global_bid, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+  MPI_Reduce(&min_local_ask, min_global_ask, 1, MPI_DOUBLE, MPI_MIN, 0, MPI_COMM_WORLD);
 }
 

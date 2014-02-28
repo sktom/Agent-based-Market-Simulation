@@ -11,17 +11,22 @@
 #define putl(x) printf("%ld\n",x)
 #define putd(x) printf("%lf\n",x)
 
-double
-urand()
+void
+init_rand()
 {
   struct timeval tv;
   gettimeofday(&tv, NULL);
   init_genrand(tv.tv_usec);
+}
+
+double
+urand()
+{
   return genrand_real1();
 }
 
 double
-grand()
+nrand()
 {
   return pow(-2 * log(urand()), 0.5) * cos(2 * M_PI * urand());
 }
