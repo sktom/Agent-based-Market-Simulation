@@ -17,7 +17,7 @@ typedef struct Agent Agent;
 void
 refresh_price(Agent * agent)
 {
-  double dp = nrand() / 2000 * agent->ask;
+  double dp = normal_rand() / 2000 * agent->ask;
   agent->ask += dp;
   agent->bid += dp;
 }
