@@ -7,10 +7,7 @@
 #include "mpi.h"
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "main.h"
-#include "util.h"
-#include "agent.h"
 
 Agent * init(int *, char **, int *, int *, int *, int *, int *);
 void get_extreme_value(double *, double *, Agent *, int);

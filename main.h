@@ -1,4 +1,7 @@
 
+#include "util.h"
+#include "agent.h"
+
 #define INIT_AGENTS \
   int number_all_agents, number_local_agents, number_trials; \
   int myid, numprocs; \
