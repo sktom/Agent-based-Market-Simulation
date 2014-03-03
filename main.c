@@ -17,7 +17,7 @@ main(int argc, char ** argv)
 {
   INIT_AGENTS;
   if(myid == 0)
-    printf("%d %d %d\n", number_all_agents, number_local_agents, number_trials);
+    printf("%d %d %ld\n", number_all_agents, number_local_agents, number_trials);
   double new_price = 0;
   unsigned long t;
   for(t = 0; t < number_trials; ++t)  {
