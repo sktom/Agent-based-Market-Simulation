@@ -18,8 +18,7 @@ init_rand()
 {
   struct timeval tv;
   gettimeofday(&tv, NULL);
-  //init_genrand(tv.tv_usec);
-  init_genrand(26);
+  init_genrand(tv.tv_usec);
 }
 
 double
