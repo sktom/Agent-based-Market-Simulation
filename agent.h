@@ -28,7 +28,7 @@ set_price(Agent * agent, double price)
 void
 refresh_price(Agent * agent)
 {
-  double dp = normal_rand() / 2000 * agent->ask;
+  double dp = normal_rand() / 2000 * agent->mid;
   set_price(agent, agent->mid + dp);
 }
 
@@ -41,7 +41,7 @@ init_agent(Agent * agent)
 }
 
 void
-init_agents(Agent * agents, int number_agents)
+init_agents(Agent * agents, ulong number_agents)
 {
   Agent * agent = agents;
   for(; number_agents--; ++agent)
@@ -54,7 +54,7 @@ init_agents(Agent * agents, int number_agents)
 double * asks = NULL;
 double * bids = NULL;
 void
-minmax(double * min_ask, double * max_bid, Agent * agents, int number_agents)
+minmax(double * min_ask, double * max_bid, Agent * agents, ulong number_agents)
 {
   if(!asks)
   {
@@ -65,7 +65,7 @@ minmax(double * min_ask, double * max_bid, Agent * agents, int number_agents)
   double * ask;
   double * bid;
   Agent * agent = agents;
-  int i;
+  ulong i;
   for(ask = asks, bid = bids, i = number_agents; i--; ++agent, ++ask, ++bid)
   {
     *ask = agent->ask;
