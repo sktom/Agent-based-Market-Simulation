@@ -9,26 +9,26 @@
 #include <stdlib.h>
 #include "main.h"
 
-Agent * init(int *, char **, int *, int *, int *, int *, int *);
-void get_extreme_value(double *, double *, Agent *, int, int);
+Agent * init(int *, char **, ulong *, ulong *, ulong *, int *, int *);
+void get_extreme_value(double *, double *, Agent *, ulong);
 
 int
 main(int argc, char ** argv)
 {
   INIT_AGENTS;
   if(myid == 0)
-    printf("%d %d %ld\n", number_all_agents, number_local_agents, number_trials);
+    printf("%ld %ld %ld\n", number_all_agents, number_local_agents, number_trials);
   double new_price = 0;
-  unsigned long t;
-  for(t = 0; t < number_trials; ++t)  {
-    int i; 
+  ulong t;
+  for(t = 0; t < number_trials; ++t)
+  {
+    ulong i; 
     Agent * agent;
-    
     for(agent = agents, i = number_local_agents; i--; ++agent)
       agent->refresh(agent);
 
     double min_whole_ask, max_whole_bid;
-    get_extreme_value(&min_whole_ask, &max_whole_bid, agents, number_local_agents, t);
+    get_extreme_value(&min_whole_ask, &max_whole_bid, agents, number_local_agents);
 
     if(myid == 0)
       if(max_whole_bid > min_whole_ask)
@@ -50,7 +50,9 @@ main(int argc, char ** argv)
 
 Agent *
 init(int * argc, char ** argv,
-    int * number_total_agents, int * number_local_agents, int * number_trials,
+    ulong * number_total_agents,
+    ulong * number_local_agents,
+    ulong * number_trials,
     int * myid, int * numprocs)
 {
   init_rand();
@@ -69,7 +71,7 @@ init(int * argc, char ** argv,
 
 void
 get_extreme_value(double * min_whole_ask, double * max_whole_bid,
-    Agent * agents, int number_local_agents, int t)
+    Agent * agents, ulong number_local_agents)
 {
   double min_local_ask, max_local_bid;
   minmax(&min_local_ask, &max_local_bid, agents, number_local_agents);
