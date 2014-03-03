@@ -11,12 +11,15 @@
 #define putl(x) printf("%ld\n",x)
 #define putd(x) printf("%lf\n",x)
 
+typedef unsigned long ulong;
+
 void
 init_rand()
 {
   struct timeval tv;
   gettimeofday(&tv, NULL);
-  init_genrand(tv.tv_usec);
+  //init_genrand(tv.tv_usec);
+  init_genrand(26);
 }
 
 double

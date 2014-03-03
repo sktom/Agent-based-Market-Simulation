@@ -1,7 +1,6 @@
 
 #include "util.h"
 #include "agent.h"
-typedef unsigned long ulong;
 
 #define INIT_AGENTS \
   ulong number_all_agents, number_local_agents, number_trials; \
