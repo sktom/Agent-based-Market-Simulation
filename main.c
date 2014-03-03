@@ -10,14 +10,16 @@
 #include "main.h"
 
 Agent * init(int *, char **, int *, int *, int *, int *, int *);
-void get_extreme_value(double *, double *, Agent *, int);
+void get_extreme_value(double *, double *, Agent *, int, int);
 
 int
 main(int argc, char ** argv)
 {
   INIT_AGENTS;
+  if(myid == 0)
+    printf("%d %d %d\n", number_all_agents, number_local_agents, number_trials);
   double new_price = 0;
-  int t;
+  unsigned long t;
   for(t = 0; t < number_trials; ++t)  {
     int i; 
     Agent * agent;
@@ -26,13 +28,13 @@ main(int argc, char ** argv)
       agent->refresh(agent);
 
     double min_whole_ask, max_whole_bid;
-    get_extreme_value(&min_whole_ask, &max_whole_bid, agents, number_local_agents);
+    get_extreme_value(&min_whole_ask, &max_whole_bid, agents, number_local_agents, t);
 
     if(myid == 0)
       if(max_whole_bid > min_whole_ask)
       {
         new_price = (min_whole_ask + max_whole_bid) / 2;
-        printf("%d %lf\n", t, new_price);
+        printf("%ld %lf\n", t, new_price);
       }
 
     MPI_Bcast(&new_price, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -67,7 +69,7 @@ init(int * argc, char ** argv,
 
 void
 get_extreme_value(double * min_whole_ask, double * max_whole_bid,
-    Agent * agents, int number_local_agents)
+    Agent * agents, int number_local_agents, int t)
 {
   double min_local_ask, max_local_bid;
   minmax(&min_local_ask, &max_local_bid, agents, number_local_agents);
