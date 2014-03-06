@@ -18,11 +18,16 @@ typedef struct Agent Agent;
 void
 set_price(Agent * agent, double price)
 {
+  /*!fix spread should be variable
   double spread = pow(price, 0.5) / 10;
   agent->spread = spread;
   agent->mid = price;
   agent->ask = price + spread / 2;
   agent->bid = price - spread / 2;
+  */
+agent->mid = price;
+agent->ask = price + agent->spread / 2;
+agent->bid = price - agent->spread / 2;
 }
 
 void
@@ -36,6 +41,7 @@ void
 init_agent(Agent * agent)
 {
   set_price(agent, 100);
+agent->spread = 1.0;
   agent->refresh = refresh_price;
   agent->set = set_price;
 }

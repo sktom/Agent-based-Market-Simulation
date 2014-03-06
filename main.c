@@ -16,8 +16,6 @@ int
 main(int argc, char ** argv)
 {
   INIT_AGENTS;
-  if(myid == 0)
-    printf("%ld %ld %ld\n", number_all_agents, number_local_agents, number_trials);
   double new_price = 0;
   ulong t;
   for(t = 0; t < number_trials; ++t)

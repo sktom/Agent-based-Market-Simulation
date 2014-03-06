@@ -24,7 +24,7 @@ init_rand()
 double
 uniform_rand()
 {
-  return genrand_real1();
+  return genrand_real3();
 }
 
 double
