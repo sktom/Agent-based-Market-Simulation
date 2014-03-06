@@ -5,3 +5,4 @@
 
 あと、MPIの練習も兼ねてます
 
+計算結果等はhttps://www.dropbox.com/sh/n6k1zlyicxf4dyn/ESY8QVxEzHで共有してます
