@@ -7,7 +7,7 @@
 struct Agent
 {
   double mid;
-  double spread;
+  double spread_rate;
   double bid;
   double ask;
   void (*refresh)();
@@ -18,30 +18,25 @@ typedef struct Agent Agent;
 void
 set_price(Agent * agent, double price)
 {
-  /*!fix spread should be variable
-  double spread = pow(price, 0.5) / 10;
-  agent->spread = spread;
   agent->mid = price;
-  agent->ask = price + spread / 2;
-  agent->bid = price - spread / 2;
-  */
-agent->mid = price;
-agent->ask = price + agent->spread / 2;
-agent->bid = price - agent->spread / 2;
+  double spread_rate = agent->spread_rate;
+  double exp_dif = (spread_rate + pow(pow(spread_rate, 2) + 4, 0.5)) / 2;
+  agent->ask = price * exp_dif;
+  agent->bid = price / exp_dif;
 }
 
 void
 refresh_price(Agent * agent)
 {
-  double dp = normal_rand() * agent->spread / 100;
-  set_price(agent, agent->mid + dp);
+  double dif_rate = 1 + normal_rand() / 100;
+  set_price(agent, agent->mid * pow(dif_rate, (long)(genrand_int32() % 2) * 2 - 1));
 }
 
 void
 init_agent(Agent * agent)
 {
+  agent->spread_rate = 0.1;
   set_price(agent, 100);
-agent->spread = 1.0;
   agent->refresh = refresh_price;
   agent->set = set_price;
 }
@@ -67,7 +62,6 @@ minmax(double * min_ask, double * max_bid, Agent * agents, ulong number_agents)
     bids = malloc(sizeof(double) * number_agents);
     asks = malloc(sizeof(double) * number_agents);
   }
-
   double * ask;
   double * bid;
   Agent * agent = agents;
